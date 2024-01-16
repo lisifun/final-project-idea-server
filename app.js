@@ -11,6 +11,7 @@ const usersRouter = require("./routes/users");
 const workspacesRouter = require("./routes/workspaces");
 const projectsRouter = require("./routes/projects");
 const ticketsRouter = require("./routes/tickets");
+const githubRouter = require("./routes/github");
 
 const app = express();
 
@@ -23,15 +24,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("trust proxy", 1);
 app.enable("trust proxy");
 
-app.use(
-  cors({
-    origin: [process.env.REACT_APP_URI], // <== URL of our future React app
-  })
-);
-
 // app.use(
-//     cors()
-//   );
+//   cors({
+//     origin: [process.env.REACT_APP_URI], // <== URL of our future React app
+//   })
+// );
+
+app.use(cors());
 
 // app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -39,6 +38,7 @@ app.use("/auth", authRouter);
 app.use("/workspaces", workspacesRouter);
 app.use("/projects", projectsRouter);
 app.use("/tickets", ticketsRouter);
+app.use("/github", githubRouter);
 
 mongoose
   .connect(process.env.MONGODB_URI)

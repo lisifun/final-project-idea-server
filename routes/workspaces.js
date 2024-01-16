@@ -2,68 +2,76 @@ const express = require("express");
 const router = express.Router();
 
 const Workspace = require("../models/Workspace");
+const User = require("../models/User");
 
 // GET - Read All workspaces
 router.get("/", (req, res) => {
   Workspace.find()
-    .populate("user")
+    // .populate("user")
     .then((allWorkspaces) => {
       res.json(allWorkspaces);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     });
 });
 
 // POST - Add a new workspace
 router.post("/", (req, res) => {
-  const { name, workspaceURL } = req.body;
+  const { name, workspaceURL, createdBy } = req.body;
   Workspace.create({
     name,
     workspaceURL,
-    createdBy: req.user._id,
+    createdBy,
+    members: [],
   })
     .then((createdWorkspace) => {
       res.json(createdWorkspace);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     });
 });
 
-//
 // GET - Get a single workspace by id
 router.get("/:workspaceId", (req, res) => {
-  Workspace.findById(req.params.workspaceId)
-    .populate("user")
+  const { workspaceId } = req.params;
+  Workspace.findById(workspaceId)
+    // .populate("user")
     .then((selectedWorkspace) => {
       res.json(selectedWorkspace);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     });
 });
 
 // POST - Update a single workspace by id
 router.put("/:workspaceId", (req, res) => {
-  Workspace.findByIdAndUpdate(req.params.workspaceId, req.body, { new: true })
+  const { workspaceId } = req.params;
+
+  Workspace.findByIdAndUpdate(workspaceId, req.body, { new: true })
     .then((updatedWorkspace) => {
+      if (!updatedWorkspace) {
+        return res.status(404).json({ error: "Workspace not found" });
+      }
       res.json(updatedWorkspace);
     })
     .catch((err) => {
-      res.json(err);
+      console.error("Error updating workspace:", err);
+      res.status(500).json({ error: err.message });
     });
 });
 
 // GET - Delete a single workspace by id
 router.delete("/:workspaceId", (req, res) => {
-  Workspace.findByIdAndDelete(req.params.workspaceId)
-    .populate("user")
+  const { workspaceId } = req.params;
+  Workspace.findByIdAndDelete(workspaceId)
     .then((deletedWorkspace) => {
       res.json(deletedWorkspace);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     });
 });
 

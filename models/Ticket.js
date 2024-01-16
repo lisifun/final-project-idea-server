@@ -6,11 +6,9 @@ const ticketScema = new Schema(
     description: { type: String },
     status: { type: String },
     priority: { type: String },
-    members: [String],
     label: { type: String },
-    project: { type: Schema.Types.ObjectId, ref: "Project" },
-    deadline: { type: Date },
     workspace: { type: Schema.Types.ObjectId, ref: "Workspace" },
+    assignee: { type: String },
   },
   { timestamps: true }
 );

@@ -1,59 +1,77 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 
 const Ticket = require("../models/Ticket");
+const Workspace = require("../models/Workspace");
 
-// GET - Read all tickets
-router.get("/", (req, res) => {
-  Ticket.find()
-    .populate("workspace")
-    .populate("project")
-    .then((allTickets) => {
-      res.json(allTickets);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
+// GET - Read all tickets in a Workspace
+router.get("/:workspaceId", async (req, res) => {
+  try {
+    // Find the workspace by ID and populate the tickets field
+    const workspaceWithTickets = await Workspace.findById(
+      req.params.workspaceId
+    ).populate("tickets");
+
+    if (!workspaceWithTickets) {
+      return res.status(404).json({ error: "Workspace not found" });
+    }
+
+    // Extract and send the tickets array
+    const allTickets = workspaceWithTickets.tickets;
+
+    res.json(allTickets);
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 // POST - Add a new ticket
-router.post("/", (req, res) => {
-  const { title, description, status, priority, label, deadline } = req.body;
+router.post("/:workspaceId", (req, res) => {
+  const { title, description, status, priority, label, assignee } = req.body;
   Ticket.create({
     title,
     description,
     status,
     priority,
-    members: [],
     label,
-    project: req.project._id,
-    deadline,
-    workspace: req.workspace._id,
+    assignee,
+    workspace: req.params.workspaceId,
   })
     .then((createdTicket) => {
-      res.json(createdTicket);
+      return Workspace.findByIdAndUpdate(
+        req.params.workspaceId,
+        {
+          $push: { tickets: createdTicket._id },
+        },
+        { new: true }
+      );
+    })
+    .then((workspaceToPopulate) => {
+      return workspaceToPopulate.populate("tickets");
+    })
+    .then((updatedWorkspace) => {
+      res.json(updatedWorkspace);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ err: "Internal Server Error" });
     });
 });
 
-// GET - Get a single ticket by id
-router.get("/:ticketId", (req, res) => {
-  Ticket.findById(req.params.ticketId)
+// // GET - Get a single ticket by id
+router.get("/:workspaceId/:ticketId", (req, res) => {
+  const { ticketId } = req.params;
+  Ticket.findById(ticketId)
     .populate("workspace")
-    .populate("project")
     .then((selectedTicket) => {
       res.json(selectedTicket);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     });
 });
 
 // POST - Update a single ticket by id
-router.put("/:ticketId", (req, res) => {
+router.put("/:workspaceId/:ticketId", (req, res) => {
   Ticket.findByIdAndUpdate(req.params.ticketId, req.body, { new: true })
 
     .then((updatedTicket) => {
@@ -65,15 +83,14 @@ router.put("/:ticketId", (req, res) => {
 });
 
 // GET - Delete a single ticket by id
-router.delete("/:ticketId", (req, res) => {
-  Ticket.findByIdAndDelete(req.params.ticketId)
-    .populate("workspace")
-    .populate("project")
+router.delete("/:workspaceId/:ticketId", (req, res) => {
+  const { ticketId } = req.params;
+  Ticket.findByIdAndDelete(ticketId)
     .then((selectedTicket) => {
       res.json(selectedTicket);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json({ error: err.message });
     });
 });
 
