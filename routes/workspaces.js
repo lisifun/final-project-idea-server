@@ -7,7 +7,6 @@ const User = require("../models/User");
 // GET - Read All workspaces
 router.get("/", (req, res) => {
   Workspace.find()
-    // .populate("user")
     .then((allWorkspaces) => {
       res.json(allWorkspaces);
     })
@@ -37,7 +36,6 @@ router.post("/", (req, res) => {
 router.get("/:workspaceId", (req, res) => {
   const { workspaceId } = req.params;
   Workspace.findById(workspaceId)
-    // .populate("user")
     .then((selectedWorkspace) => {
       res.json(selectedWorkspace);
     })

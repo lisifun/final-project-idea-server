@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const Ticket = require("../models/Ticket");
-// This is comment to add
 
-// POST - Add a new pull request from Github
+// POST
 router.post("/", (req, res) => {
   if (req.body.pull_request.body) {
     console.log("pull_request => ", req.body.pull_request);
