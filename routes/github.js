@@ -1,16 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 
-const Github = require("../models/Github");
 const Ticket = require("../models/Ticket");
-
-/* POST github listing. */
-// router.post("/", function (req, res, next) {
-//   console.log("req.body => ", req.body);
-
-//   res.send("respond with a resource");
-// });
 
 // POST - Add a new pull request from Github
 router.post("/", (req, res) => {

@@ -26,31 +26,6 @@ router.get("/:workspaceId", async (req, res) => {
   }
 });
 
-// router.get("/:workspaceId", async (req, res) => {
-//   try {
-//     // Find the workspace by ID and populate the tickets field
-//     const workspaceWithTickets = await Workspace.findById(
-//       req.params.workspaceId
-//     ).populate("tickets");
-
-//     if (!workspaceWithTickets) {
-//       return res.status(404).json({ error: "Workspace not found" });
-//     }
-
-//     // Extract and send the tickets array
-//     const allTickets = workspaceWithTickets.tickets;
-
-//     allTickets.map((ticket) => {if (ticket._id.slice(0,6) === pullRequestId) {
-//       if (ticket.status === 'todo' && pullRequestId)
-
-//     }})
-
-//     res.json(allTickets);
-//   } catch (err) {
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
 // POST - Add a new ticket
 router.post("/:workspaceId", (req, res) => {
   const { title, description, status, priority, label, assignee } = req.body;
