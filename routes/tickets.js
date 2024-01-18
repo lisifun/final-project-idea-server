@@ -3,7 +3,6 @@ const router = express.Router();
 
 const Ticket = require("../models/Ticket");
 const Workspace = require("../models/Workspace");
-const Github = require("../models/Github");
 
 // GET - Read all tickets in a Workspace
 router.get("/:workspaceId", async (req, res) => {
@@ -28,7 +27,16 @@ router.get("/:workspaceId", async (req, res) => {
 
 // POST - Add a new ticket
 router.post("/:workspaceId", (req, res) => {
-  const { title, description, status, priority, label, assignee } = req.body;
+  const {
+    title,
+    description,
+    status,
+    priority,
+    label,
+    assignee,
+    comments,
+    createdBy,
+  } = req.body;
   Ticket.create({
     title,
     description,
@@ -36,7 +44,9 @@ router.post("/:workspaceId", (req, res) => {
     priority,
     label,
     assignee,
+    comments,
     workspace: req.params.workspaceId,
+    createdBy,
   })
     .then((createdTicket) => {
       return Workspace.findByIdAndUpdate(
@@ -51,6 +61,7 @@ router.post("/:workspaceId", (req, res) => {
       return workspaceToPopulate.populate("tickets");
     })
     .then((updatedWorkspace) => {
+      console.log("64 => ", updatedWorkspace);
       res.json(updatedWorkspace);
     })
     .catch((err) => {

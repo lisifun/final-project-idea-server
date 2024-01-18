@@ -9,6 +9,18 @@ const ticketScema = new Schema(
     label: { type: String },
     workspace: { type: Schema.Types.ObjectId, ref: "Workspace" },
     assignee: { type: String },
+    comments: [
+      {
+        comment: { type: String },
+        createdAt: { type: Date },
+      },
+    ],
+    createdBy: {
+      username: { type: String },
+      photo: { type: String },
+      fullname: { type: String },
+      email: { type: String },
+    },
   },
   { timestamps: true }
 );

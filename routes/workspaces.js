@@ -17,12 +17,12 @@ router.get("/", (req, res) => {
 
 // POST - Add a new workspace
 router.post("/", (req, res) => {
-  const { name, workspaceURL, createdBy } = req.body;
+  const { name, workspaceURL, createdBy, members } = req.body;
   Workspace.create({
     name,
     workspaceURL,
     createdBy,
-    members: [],
+    members,
   })
     .then((createdWorkspace) => {
       res.json(createdWorkspace);
