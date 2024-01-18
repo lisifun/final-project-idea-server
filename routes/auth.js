@@ -12,7 +12,6 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 const saltRounds = 10;
 
 // POST  /auth/signup
-// ...
 router.post("/signup", (req, res, next) => {
   const { email, password, username, fullName } = req.body;
 
@@ -28,13 +27,6 @@ router.post("/signup", (req, res, next) => {
     res.status(400).json({ message: "Provide a valid email address." });
     return;
   }
-
-  // Use regex to validate the password format
-  // const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
-  // if (!passwordRegex.test(password)) {
-  //   res.status(400).json({ message: 'Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.' });
-  //   return;
-  // }
 
   // Check the users collection if a user with the same email already exists
   User.findOne({ email })
@@ -87,7 +79,6 @@ router.post("/signup", (req, res, next) => {
 });
 
 // POST  /auth/login
-// ...
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 
@@ -143,6 +134,5 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   // previously set as the token payload
   res.status(200).json(req.user);
 });
-// ...
 
 module.exports = router;
