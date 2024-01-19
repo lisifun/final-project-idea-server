@@ -53,7 +53,7 @@ router.get("/:projectId", (req, res) => {
     });
 });
 
-// POST - Update a single Project by id
+// POST - Update a single Project by id.
 router.put("/:projectId", (req, res) => {
   Project.findByIdAndUpdate(req.params.projectId, req.body, { new: true })
     .then((updatedProject) => {
