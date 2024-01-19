@@ -22,7 +22,7 @@ router.post("/", (req, res) => {
         const filteredTickets = tickets.filter((ticket) =>
           ticket._id.toString().startsWith(sentTicketId)
         );
-        console.log("first then");
+        console.log("first then", filteredTickets[0], pullRequestStatus);
         if (
           filteredTickets[0].status === "todo" &&
           pullRequestStatus === "open"
