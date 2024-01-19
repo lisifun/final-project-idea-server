@@ -11,6 +11,8 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 
 const saltRounds = 10;
 
+// test comment
+
 // POST  /auth/signup
 router.post("/signup", (req, res, next) => {
   const { email, password, username, fullName } = req.body;
