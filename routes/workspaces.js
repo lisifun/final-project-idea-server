@@ -18,6 +18,7 @@ router.get("/", (req, res) => {
 // POST - Add a new workspace
 router.post("/", (req, res) => {
   const { name, workspaceURL, createdBy, members } = req.body;
+  console.log(req.body);
   Workspace.create({
     name,
     workspaceURL,
@@ -47,6 +48,7 @@ router.get("/:workspaceId", (req, res) => {
 // POST - Update a single workspace by id
 router.put("/:workspaceId", (req, res) => {
   const { workspaceId } = req.params;
+  console.log("llll", req.body);
 
   Workspace.findByIdAndUpdate(workspaceId, req.body, { new: true })
     .then((updatedWorkspace) => {

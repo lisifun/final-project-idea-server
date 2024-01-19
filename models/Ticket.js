@@ -13,18 +13,14 @@ const ticketScema = new Schema(
       {
         comment: { type: String },
         createdAt: { type: Date },
+        createdBy: {
+          username: { type: String, required: true },
+          photo: { type: String, required: true },
+        },
       },
     ],
-    createdBy: {
-      username: { type: String },
-      photo: { type: String },
-      fullname: { type: String },
-      email: { type: String },
-    },
   },
   { timestamps: true }
 );
 
 module.exports = model("Ticket", ticketScema);
-
-// hey
