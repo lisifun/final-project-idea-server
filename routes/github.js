@@ -14,7 +14,7 @@ router.post("/", (req, res) => {
       req.body.pull_request.body.split(" ").filter((word) => {
         return word[0] === "#";
       })
-    ).slice(1, 7);
+    ).slice(1, 25);
 
     console.log("sentTicketId => ", sentTicketId);
     Ticket.find()
