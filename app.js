@@ -5,7 +5,7 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
-// const indexRouter = require("./routes/index");
+// const indexRouter = require("./routes/index");...
 const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const workspacesRouter = require("./routes/workspaces");
